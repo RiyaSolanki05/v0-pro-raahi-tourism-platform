@@ -1,0 +1,232 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated to warm, touristy color palette inspired by Jharkhand's natural beauty */
+  --background: oklch(0.98 0.01 45); /* Warm cream background */
+  --foreground: oklch(0.25 0.02 30); /* Deep brown text */
+  --card: oklch(0.99 0.005 50); /* Soft warm white */
+  --card-foreground: oklch(0.25 0.02 30);
+  --popover: oklch(0.99 0.005 50);
+  --popover-foreground: oklch(0.25 0.02 30);
+  --primary: oklch(0.55 0.15 35); /* Terracotta orange - main brand color */
+  --primary-foreground: oklch(0.98 0.01 45);
+  --secondary: oklch(0.45 0.12 140); /* Forest green */
+  --secondary-foreground: oklch(0.98 0.01 45);
+  --muted: oklch(0.94 0.01 45); /* Light warm gray */
+  --muted-foreground: oklch(0.45 0.02 30);
+  --accent: oklch(0.75 0.15 85); /* Golden yellow accent */
+  --accent-foreground: oklch(0.25 0.02 30);
+  --destructive: oklch(0.55 0.2 15); /* Warm red */
+  --destructive-foreground: oklch(0.98 0.01 45);
+  --border: oklch(0.88 0.02 45); /* Warm border */
+  --input: oklch(0.96 0.01 45); /* Light warm input */
+  --ring: oklch(0.55 0.15 35); /* Terracotta focus ring */
+  --chart-1: oklch(0.55 0.15 35); /* Terracotta */
+  --chart-2: oklch(0.45 0.12 140); /* Forest green */
+  --chart-3: oklch(0.75 0.15 85); /* Golden yellow */
+  --chart-4: oklch(0.65 0.1 200); /* Soft blue */
+  --chart-5: oklch(0.6 0.12 320); /* Warm purple */
+  --radius: 0.75rem; /* Slightly more rounded for friendlier feel */
+  --sidebar: oklch(0.96 0.01 45);
+  --sidebar-foreground: oklch(0.25 0.02 30);
+  --sidebar-primary: oklch(0.55 0.15 35);
+  --sidebar-primary-foreground: oklch(0.98 0.01 45);
+  --sidebar-accent: oklch(0.94 0.01 45);
+  --sidebar-accent-foreground: oklch(0.25 0.02 30);
+  --sidebar-border: oklch(0.88 0.02 45);
+  --sidebar-ring: oklch(0.55 0.15 35);
+}
+
+.dark {
+  /* Updated dark mode to maintain warm feel with darker tones */
+  --background: oklch(0.15 0.02 30); /* Dark warm brown */
+  --foreground: oklch(0.95 0.01 45); /* Warm white text */
+  --card: oklch(0.18 0.02 30);
+  --card-foreground: oklch(0.95 0.01 45);
+  --popover: oklch(0.18 0.02 30);
+  --popover-foreground: oklch(0.95 0.01 45);
+  --primary: oklch(0.65 0.15 35); /* Lighter terracotta for dark mode */
+  --primary-foreground: oklch(0.15 0.02 30);
+  --secondary: oklch(0.55 0.12 140); /* Brighter forest green */
+  --secondary-foreground: oklch(0.95 0.01 45);
+  --muted: oklch(0.25 0.02 30);
+  --muted-foreground: oklch(0.65 0.02 30);
+  --accent: oklch(0.8 0.15 85); /* Brighter golden yellow */
+  --accent-foreground: oklch(0.15 0.02 30);
+  --destructive: oklch(0.65 0.2 15);
+  --destructive-foreground: oklch(0.95 0.01 45);
+  --border: oklch(0.3 0.02 30);
+  --input: oklch(0.25 0.02 30);
+  --ring: oklch(0.65 0.15 35);
+  --sidebar: oklch(0.2 0.02 30);
+  --sidebar-foreground: oklch(0.95 0.01 45);
+  --sidebar-primary: oklch(0.65 0.15 35);
+  --sidebar-primary-foreground: oklch(0.15 0.02 30);
+  --sidebar-accent: oklch(0.25 0.02 30);
+  --sidebar-accent-foreground: oklch(0.95 0.01 45);
+  --sidebar-border: oklch(0.3 0.02 30);
+  --sidebar-ring: oklch(0.65 0.15 35);
+}
+
+@theme inline {
+  /* Updated fonts to be more friendly and readable */
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* ProRaahi Tourism Theme - Warm & Welcoming */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+body {
+  font-family: var(--font-sans);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  /* Added subtle texture for more organic feel */
+  background-image: radial-gradient(circle at 1px 1px, rgba(139, 69, 19, 0.03) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+/* Updated scrollbar to match warm theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 4px;
+  border: 1px solid hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--secondary));
+}
+
+/* Enhanced animations for more engaging feel */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.5s ease-out;
+}
+
+.animate-bounce-gentle {
+  animation: bounce 2s infinite;
+}
+
+/* Warm gradient backgrounds for special sections */
+.warm-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--secondary)) 100%);
+}
+
+.warm-gradient-subtle {
+  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 50%, hsl(var(--background)) 100%);
+}
+
+/* Tourism-specific styling */
+.tourism-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
+  transition: all 0.3s ease;
+}
+
+.tourism-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 69, 19, 0.15);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
