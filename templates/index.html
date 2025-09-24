@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProRaahi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-mountain"></i> ProRaahi</h1>
+                <p>Your AI-powered guide to eco & cultural tourism in Jharkhand</p>
+            </div>
+            
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="or">ଓଡ଼ିଆ (Odia)</option>
+                    <option value="ur">اردو (Urdu)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="bot-info">
+                    <div class="bot-avatar">🏔️</div>
+                    <div>
+                        <h3>Tourism Bot</h3>
+                        <span class="status">Online</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <p>Hello! Welcome to Jharkhand Tourism Assistant. How can I help you explore the beautiful state of Jharkhand? 🌿</p>
+                        <button class="speaker-btn" onclick="playAudio('Hello! Welcome to Jharkhand Tourism Assistant')">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+
+            <!-- Scroll to bottom button -->
+            <button class="scroll-to-bottom" id="scrollToBottom" onclick="scrollToBottom()">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+
+            <!-- Chat Input -->
+            <div class="chat-input">
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="Ask me about Jharkhand tourism, itinerary planning, or cultural sites..." onkeypress="handleKeyPress(event)">
+                    <div class="input-buttons">
+                        <button class="mic-btn" id="micBtn" onclick="toggleRecording()">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button class="send-btn" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="recording-status" id="recordingStatus" style="display: none;">
+                    <i class="fas fa-circle recording-dot"></i>
+                    Recording... Click to stop
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="sendQuickMessage('Show me tourist places in Jharkhand')">
+                <i class="fas fa-map-marker-alt"></i> Tourist Places
+            </button>
+            <button class="quick-btn" onclick="sendQuickMessage('Plan a 3 day nature trip')">
+                <i class="fas fa-calendar-alt"></i> Plan Itinerary
+            </button>
+            <button class="quick-btn" onclick="sendQuickMessage('Tell me about cultural sites')">
+                <i class="fas fa-university"></i> Cultural Sites
+            </button>
+            <button class="quick-btn" onclick="sendQuickMessage('Help me with eco-tourism')">
+                <i class="fas fa-leaf"></i> Eco Tourism
+            </button>
+        </div>
+    </div>
+
+    <!-- Audio element for TTS -->
+    <audio id="audioPlayer" style="display: none;"></audio>
+
+    <script>
+        let isRecording = false;
+        let mediaRecorder;
+        let audioChunks = [];
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize chat
+            updateLanguageUI();
+            
+            // Add language change listener
+            document.getElementById('languageSelect').addEventListener('change', updateLanguageUI);
+            
+            // Add scroll listener for scroll-to-bottom button
+            const chatMessages = document.getElementById('chatMessages');
+            const scrollBtn = document.getElementById('scrollToBottom');
+            
+            chatMessages.addEventListener('scroll', function() {
+                const isScrolledUp = chatMessages.scrollTop < (chatMessages.scrollHeight - chatMessages.clientHeight - 50);
+                scrollBtn.classList.toggle('show', isScrolledUp);
+            });
+            
+            // Ensure messages area is properly sized
+            adjustChatHeight();
+            window.addEventListener('resize', adjustChatHeight);
+        });
+
+        function adjustChatHeight() {
+            const container = document.querySelector('.container');
+            const header = document.querySelector('.header');
+            const chatHeader = document.querySelector('.chat-header');
+            const chatInput = document.querySelector('.chat-input');
+            const quickActions = document.querySelector('.quick-actions');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            if (container && header && chatMessages) {
+                const headerHeight = header.offsetHeight;
+                const chatHeaderHeight = chatHeader ? chatHeader.offsetHeight : 0;
+                const inputHeight = chatInput ? chatInput.offsetHeight : 0;
+                const actionsHeight = quickActions ? quickActions.offsetHeight : 0;
+                const containerHeight = container.clientHeight;
+                
+                const availableHeight = containerHeight - headerHeight - chatHeaderHeight - inputHeight - actionsHeight - 20;
+                chatMessages.style.maxHeight = availableHeight + 'px';
+            }
+        }
+
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTo({
+                top: chatMessages.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function updateLanguageUI() {
+            const language = document.getElementById('languageSelect').value;
+            const placeholder = {
+                'en': 'Ask me about Jharkhand tourism, itinerary planning, or cultural sites...',
+                'hi': 'झारखंड पर्यटन, यात्रा योजना या सांस्कृतिक स्थलों के बारे में पूछें...',
+                'bn': 'ঝাড়খণ্ড পর্যটন, ভ্রমণ পরিকল্পনা বা সাংস্কৃতিক স্থান সম্পর্কে জিজ্ঞাসা করুন...',
+                'or': 'ଝାଡ଼ଖଣ୍ଡ ପର୍ଯ୍ୟଟନ, ଯାତ୍ରା ଯୋଜନା କିମ୍ବା ସାଂସ୍କୃତିକ ସ୍ଥାନ ବିଷୟରେ ପଚାରନ୍ତୁ...',
+                'ur': 'جھارکھنڈ ٹورزم، سفری منصوبہ بندی یا ثقافتی مقامات کے بارے میں پوچھیں...'
+            };
+            
+            document.getElementById('messageInput').placeholder = placeholder[language] || placeholder['en'];
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('messageInput').value = message;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+
+            // Clear input
+            messageInput.value = '';
+
+            // Add user message to chat
+            addMessageToChat('user', message);
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Send message to backend
+                const language = document.getElementById('languageSelect').value;
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        language: language
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Remove typing indicator
+                removeTypingIndicator();
+
+                if (data.success) {
+                    // Add bot response to chat
+                    addMessageToChat('bot', data.response);
+                    
+                    // Generate TTS for bot response
+                    generateTTS(data.response, language);
+                } else {
+                    addMessageToChat('bot', 'Sorry, I encountered an error. Please try again.');
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                addMessageToChat('bot', 'Sorry, I couldn\'t process your request. Please check your connection.');
+                console.error('Error:', error);
+            }
+        }
+
+        function addMessageToChat(sender, message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+
+            const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if (sender === 'bot') {
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        <p>${formatMessage(message)}</p>
+                        <button class="speaker-btn" onclick="playAudio('${message.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div class="message-time">${currentTime}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        <p>${message}</p>
+                    </div>
+                    <div class="message-time">${currentTime}</div>
+                `;
+            }
+
+            chatMessages.appendChild(messageDiv);
+            
+            // Auto-scroll to bottom
+            setTimeout(() => {
+                scrollToBottom();
+            }, 100);
+        }
+
+        function formatMessage(message) {
+            // Convert newlines to <br> tags and preserve formatting
+            return message
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/•/g, '&bull;')
+                .replace(/(🌿|🏛️|🏔️|🗓️|💡)/g, '<span class="emoji">$1</span>');
+        }
+
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        async function toggleRecording() {
+            const micBtn = document.getElementById('micBtn');
+            const recordingStatus = document.getElementById('recordingStatus');
+
+            if (!isRecording) {
+                // Start recording using Web Speech API
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    const recognition = new SpeechRecognition();
+                    
+                    // Configure recognition
+                    const language = document.getElementById('languageSelect').value;
+                    const languageMap = {
+                        'en': 'en-US',
+                        'hi': 'hi-IN',
+                        'bn': 'bn-IN',
+                        'or': 'or-IN',
+                        'ur': 'ur-PK'
+                    };
+                    
+                    recognition.lang = languageMap[language] || 'en-US';
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    recognition.maxAlternatives = 1;
+
+                    recognition.onstart = function() {
+                        isRecording = true;
+                        micBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                        micBtn.classList.add('recording');
+                        recordingStatus.style.display = 'block';
+                    };
+
+                    recognition.onresult = function(event) {
+                        const transcript = event.results[0][0].transcript;
+                        document.getElementById('messageInput').value = transcript;
+                        
+                        // Auto-send the message
+                        setTimeout(() => {
+                            sendMessage();
+                        }, 500);
+                    };
+
+                    recognition.onerror = function(event) {
+                        console.error('Speech recognition error:', event.error);
+                        alert('Speech recognition error: ' + event.error + '. Please try again.');
+                        resetMicButton();
+                    };
+
+                    recognition.onend = function() {
+                        resetMicButton();
+                    };
+
+                    // Start recognition
+                    try {
+                        recognition.start();
+                    } catch (error) {
+                        console.error('Failed to start speech recognition:', error);
+                        alert('Could not start speech recognition. Please check microphone permissions.');
+                        resetMicButton();
+                    }
+                } else {
+                    alert('Speech recognition is not supported in your browser. Please use Chrome, Edge, or Safari.');
+                }
+            } else {
+                // Stop recording
+                resetMicButton();
+            }
+        }
+
+        function resetMicButton() {
+            const micBtn = document.getElementById('micBtn');
+            const recordingStatus = document.getElementById('recordingStatus');
+            
+            isRecording = false;
+            micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            micBtn.classList.remove('recording');
+            recordingStatus.style.display = 'none';
+        }
+
+        async function generateTTS(text, language) {
+            // Using Web Speech API for TTS instead of server-side processing
+            return null; // No server call needed
+        }
+
+        async function playAudio(text) {
+            const language = document.getElementById('languageSelect').value;
+            
+            // Use browser's Web Speech API for text-to-speech
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // Set language-specific voice
+                const languageMap = {
+                    'en': 'en-US',
+                    'hi': 'hi-IN',
+                    'bn': 'bn-IN',
+                    'or': 'or-IN',
+                    'ur': 'ur-PK'
+                };
+                
+                const targetLang = languageMap[language] || 'en-US';
+                
+                // Wait for voices to load if they haven't already
+                const setVoiceAndSpeak = () => {
+                    const voices = speechSynthesis.getVoices();
+                    
+                    // Find best matching voice for the language
+                    let voice = voices.find(v => v.lang === targetLang);
+                    if (!voice) {
+                        // Fallback to language family (e.g., 'hi' for 'hi-IN')
+                        const langFamily = targetLang.split('-')[0];
+                        voice = voices.find(v => v.lang.startsWith(langFamily));
+                    }
+                    if (!voice) {
+                        // Final fallback to default voice
+                        voice = voices.find(v => v.default) || voices[0];
+                    }
+                    
+                    if (voice) {
+                        utterance.voice = voice;
+                    }
+                    
+                    // Configure speech parameters
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 1.0;
+                    
+                    // Add error handling
+                    utterance.onerror = function(event) {
+                        console.error('Speech synthesis error:', event.error);
+                    };
+                    
+                    utterance.onstart = function() {
+                        console.log('Speech started for:', language);
+                    };
+                    
+                    // Start speaking
+                    speechSynthesis.speak(utterance);
+                };
+                
+                // Check if voices are already loaded
+                if (speechSynthesis.getVoices().length > 0) {
+                    setVoiceAndSpeak();
+                } else {
+                    // Wait for voices to load
+                    speechSynthesis.onvoiceschanged = setVoiceAndSpeak;
+                }
+            } else {
+                alert('Text-to-speech is not supported in your browser.');
+            }
+        }
+
+        // Load voices when they become available and ensure compatibility
+        if ('speechSynthesis' in window) {
+            // Force voices to load
+            speechSynthesis.getVoices();
+            
+            speechSynthesis.onvoiceschanged = function() {
+                console.log('Voices loaded:', speechSynthesis.getVoices().length);
+            };
+        }
+    </script>
+</body>
+</html>
