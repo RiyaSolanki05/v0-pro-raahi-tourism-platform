@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button"
-import { MapPin, Menu } from "lucide-react"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import { MapPin, Menu } from "lucide-react";
+import Link from "next/link";
 
 export function Header() {
   return (
@@ -12,23 +12,45 @@ export function Header() {
           </div>
           <div>
             <span className="text-xl font-bold text-foreground">ProRaahi</span>
-            <div className="text-xs text-muted-foreground">Jharkhand Tourism</div>
+            <div className="text-xs text-muted-foreground">
+              Jharkhand Tourism
+            </div>
           </div>
         </div>
 
         <nav className="hidden md:flex items-center space-x-8">
-          <Link href="#destinations" className="text-muted-foreground hover:text-primary transition-colors font-medium">
+          <Link
+            href="#destinations"
+            className="text-muted-foreground hover:text-primary transition-colors font-medium"
+          >
             Destinations
           </Link>
-          <Link href="#experiences" className="text-muted-foreground hover:text-primary transition-colors font-medium">
+          <Link
+            href="#experiences"
+            className="text-muted-foreground hover:text-primary transition-colors font-medium"
+          >
             Experiences
           </Link>
-          <Link href="#culture" className="text-muted-foreground hover:text-primary transition-colors font-medium">
+          <Link
+            href="#culture"
+            className="text-muted-foreground hover:text-primary transition-colors font-medium"
+          >
             Culture
           </Link>
-          <Link href="#contact" className="text-muted-foreground hover:text-primary transition-colors font-medium">
+          <Link
+            href="#contact"
+            className="text-muted-foreground hover:text-primary transition-colors font-medium"
+          >
             Contact
           </Link>
+          <a
+            href="https://jharkhand-arvr-journey.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-primary transition-colors font-medium"
+          >
+            Feel It
+          </a>
         </nav>
 
         <div className="flex items-center space-x-3">
@@ -44,5 +66,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }
