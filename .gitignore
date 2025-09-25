@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -26,6 +25,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-=======
 -e "credentials/\n*.json\n.env\nservice-account-key.json\n__pycache__/\nnode_modules/\n*.log" 
->>>>>>> b210161 (Initial commit of Jharkhand Tourism Chatbot project)

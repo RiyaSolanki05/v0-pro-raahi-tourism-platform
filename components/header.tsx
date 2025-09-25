@@ -33,7 +33,7 @@ export function Header() {
 
         <div className="flex items-center space-x-3">
           <Button variant="ghost" className="hidden sm:flex" asChild>
-            <Link href="/chat">Ask AI Guide</Link>
+            <Link href="https://proraahibot.onrender.com/">Ask AI Guide</Link>
           </Button>
           <Button className="bg-primary hover:bg-primary/90 shadow-lg" asChild>
             <Link href="/plan">Start Adventure</Link>
