@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { MapPin, Menu } from "lucide-react";
 import Link from "next/link";
+// import Logo from "@/components/widgets/logo.jpg";
 
 export function Header() {
   return (
@@ -11,19 +12,24 @@ export function Header() {
             <MapPin className="w-5 h-5 text-primary-foreground" />
           </div>
           <div>
-            <span className="text-xl font-bold text-foreground">ProRaahi</span>
+            <span className="text-xl font-bold text-foreground">
+              ProRaahi
+              {/* <img src={Logo.src} className="h-40" alt="ProRaahi Logo" /> */}
+            </span>
             <div className="text-xs text-muted-foreground">
               Jharkhand Tourism
             </div>
           </div>
         </div>
 
-        <nav className="hidden md:flex items-center space-x-8">
+        {/* <nav className="hidden md:flex items-center space-x-8">
           <Link
-            href="#destinations"
+            href="https://dashboard-pro-raahi.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-muted-foreground hover:text-primary transition-colors font-medium"
           >
-            Destinations
+            Dashboard
           </Link>
           <Link
             href="#experiences"
@@ -51,14 +57,29 @@ export function Header() {
           >
             Feel It
           </a>
-        </nav>
+        </nav> */}
 
         <div className="flex items-center space-x-3">
+          <Button variant="ghost" className="hidden sm:flex" asChild>
+            <Link
+              href="https://dashboard-pro-raahi.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Dashboard
+            </Link>
+          </Button>
           <Button variant="ghost" className="hidden sm:flex" asChild>
             <Link href="https://proraahibot.onrender.com/">Ask AI Guide</Link>
           </Button>
           <Button className="bg-primary hover:bg-primary/90 shadow-lg" asChild>
-            <Link href="/plan">Start Adventure</Link>
+            <Link
+              href="https://jharkhand-arvr-journey.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Start Adventure
+            </Link>
           </Button>
           <Button variant="ghost" size="icon" className="md:hidden">
             <Menu className="w-5 h-5" />

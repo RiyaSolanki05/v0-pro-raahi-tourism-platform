@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Sparkles, Heart, Star } from "lucide-react"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Sparkles, Heart, Star } from "lucide-react";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -25,8 +25,9 @@ export function HeroSection() {
           </h1>
 
           <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto mb-10 leading-relaxed">
-            Discover ancient tribal traditions, explore pristine waterfalls, and immerse yourself in vibrant festivals.
-            Our AI companion makes every moment of your Jharkhand journey unforgettable.
+            Discover ancient tribal traditions, explore pristine waterfalls, and
+            immerse yourself in vibrant festivals. Our AI companion makes every
+            moment of your Jharkhand journey unforgettable.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
@@ -35,7 +36,7 @@ export function HeroSection() {
               className="text-lg px-10 py-6 bg-primary hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
               asChild
             >
-              <Link href="/chat">
+              <Link href="https://proraahibot.onrender.com/">
                 Plan My Adventure
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Link>
@@ -56,32 +57,49 @@ export function HeroSection() {
                 <Star className="w-5 h-5 text-accent mr-1 fill-current" />
                 <div className="text-3xl font-bold text-primary">50+</div>
               </div>
-              <div className="text-sm text-muted-foreground font-medium">Amazing Destinations</div>
+              <div className="text-sm text-muted-foreground font-medium">
+                Amazing Destinations
+              </div>
             </div>
-            <div className="tourism-card p-6 animate-slide-in-left" style={{ animationDelay: "0.1s" }}>
+            <div
+              className="tourism-card p-6 animate-slide-in-left"
+              style={{ animationDelay: "0.1s" }}
+            >
               <div className="flex items-center justify-center mb-2">
                 <Heart className="w-5 h-5 text-accent mr-1 fill-current" />
                 <div className="text-3xl font-bold text-primary">200+</div>
               </div>
-              <div className="text-sm text-muted-foreground font-medium">Happy Travelers</div>
+              <div className="text-sm text-muted-foreground font-medium">
+                Happy Travelers
+              </div>
             </div>
-            <div className="tourism-card p-6 animate-slide-in-left" style={{ animationDelay: "0.2s" }}>
+            <div
+              className="tourism-card p-6 animate-slide-in-left"
+              style={{ animationDelay: "0.2s" }}
+            >
               <div className="flex items-center justify-center mb-2">
                 <Sparkles className="w-5 h-5 text-accent mr-1" />
                 <div className="text-3xl font-bold text-primary">24/7</div>
               </div>
-              <div className="text-sm text-muted-foreground font-medium">AI Travel Buddy</div>
+              <div className="text-sm text-muted-foreground font-medium">
+                AI Travel Buddy
+              </div>
             </div>
-            <div className="tourism-card p-6 animate-slide-in-left" style={{ animationDelay: "0.3s" }}>
+            <div
+              className="tourism-card p-6 animate-slide-in-left"
+              style={{ animationDelay: "0.3s" }}
+            >
               <div className="flex items-center justify-center mb-2">
                 <Star className="w-5 h-5 text-accent mr-1 fill-current" />
                 <div className="text-3xl font-bold text-primary">15+</div>
               </div>
-              <div className="text-sm text-muted-foreground font-medium">Cultural Festivals</div>
+              <div className="text-sm text-muted-foreground font-medium">
+                Cultural Festivals
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
